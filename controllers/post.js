@@ -22,7 +22,12 @@ const getPosts = async (req, res) => {
   }
 };
 
-const getPost = async (req, res) => {};
+const getPost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id).lean();
+    res.render('posts-show', { post });
+  } catch (error) {}
+};
 
 const updatePost = async (req, res) => {};
 
