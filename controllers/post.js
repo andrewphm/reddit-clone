@@ -13,7 +13,14 @@ const newPost = async (req, res) => {
   res.render('posts-new');
 };
 
-const getPosts = async (req, res) => {};
+const getPosts = async (req, res) => {
+  try {
+    const posts = await Post.find({}).lean();
+    res.render('posts-index', { posts });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const getPost = async (req, res) => {};
 
