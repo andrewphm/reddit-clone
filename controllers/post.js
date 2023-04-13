@@ -4,9 +4,8 @@ const Post = require('../models/Post');
 const createPost = async (req, res) => {
   const post = new Post(req.body);
   await post.save();
-  console.log('Post created: ', post);
   // Redirect to the home page
-  res.redirect('/');
+  res.redirect('/posts');
 };
 
 const newPost = async (req, res) => {

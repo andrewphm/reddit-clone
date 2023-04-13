@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+require('dotenv').config();
 
 const postRoutes = require('./routes/post');
 
@@ -24,3 +25,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(5000, () => console.log(`Sever started on http://localhost:5000`));
+
+module.exports = app;
