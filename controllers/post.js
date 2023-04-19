@@ -32,6 +32,17 @@ const updatePost = async (req, res) => {};
 
 const deletePost = async (req, res) => {};
 
+const getSubredditPosts = async (req, res) => {
+  try {
+    const posts = await Post.find({ subreddit: req.params.subreddit }).lean();
+    return res.render('posts-index', { posts });
+  } catch (error) {
+    return res.status(404).json({
+      error: 'No subreddit found with that name',
+    });
+  }
+};
+
 module.exports = {
   newPost,
   createPost,
@@ -39,4 +50,5 @@ module.exports = {
   getPost,
   updatePost,
   deletePost,
+  getSubredditPosts,
 };

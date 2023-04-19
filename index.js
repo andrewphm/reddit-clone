@@ -4,6 +4,7 @@ const app = express();
 require('dotenv').config();
 
 const postRoutes = require('./routes/post');
+const subredditRoutes = require('./routes/subreddit');
 
 const exphbs = require('express-handlebars');
 app.use(express.static('public'));
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/posts', postRoutes);
+app.use('/', subredditRoutes);
 
 app.get('/', (req, res) => {
   res.render('home');

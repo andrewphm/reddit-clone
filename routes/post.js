@@ -12,8 +12,11 @@ const {
 router.get('/new', newPost);
 router.get('/', getPosts);
 router.get('/:id', getPost);
+
 router.post('/new', createPost);
+
 router.put('/:id', updatePost);
+
 router.delete('/:id', deletePost);
 
 module.exports = router;
