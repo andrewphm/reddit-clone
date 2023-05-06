@@ -1,45 +1,53 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+const mongoose = require('mongoose');
 const { describe, it, beforeEach } = require('mocha');
-chai.use(chaiHttp);
 const app = require('../index');
-const agent = chai.request.agent(app);
+const Post = require('../models/Post');
 
-// Import the Post model from our models folder so we
-// we can use it in our tests.
-const Post = require('../models/post');
-
-const should = chai.should();
+chai.use(chaiHttp);
+const expect = chai.expect;
 
 describe('Posts', () => {
-  // Post that we'll use for testing purposes
-  const newPost = {
-    title: 'post title',
-    url: 'https://www.google.com',
-    summary: 'post summary',
-  };
-
   beforeEach(async () => {
     await Post.deleteMany({});
   });
 
-  it('should create with valid attributes at POST /posts/new', async () => {
-    // Checks how many posts there are now
-    const initialDocCount = await Post.estimatedDocumentCount();
+  describe('POST /posts/new', () => {
+    it('should create a new post with valid attributes', async () => {
+      const initialDocCount = await Post.estimatedDocumentCount();
+      expect(initialDocCount).to.equal(0);
 
-    const res = await agent
-      .post('/posts/new')
-      // This line fakes a form post,
-      // since we're not actually filling out a form
-      .set('content-type', 'application/x-www-form-urlencoded')
-      // Make a request to create another
-      .send(newPost);
+      const res = await chai.request(app).post('/posts/new').send({
+        title: 'post title',
+        url: 'https://www.google.com',
+        summary: 'post summary',
+        subreddit: 'test',
+      });
 
-    const newDocCount = await Post.estimatedDocumentCount();
+      const newDocCount = await Post.estimatedDocumentCount();
 
-    // Check that the database has status 200
-    res.should.have.status(200);
-    // Check that the database has one more post in it
-    newDocCount.should.equal(initialDocCount + 1);
+      expect(res.status).to.equal(200);
+
+      expect(newDocCount).to.equal(initialDocCount + 1);
+    });
+
+    it('should return an error if required fields are missing', async () => {
+      const initialDocCount = await Post.estimatedDocumentCount();
+      expect(initialDocCount).to.equal(0);
+
+      const res = await chai.request(app).post('/posts/new').send({
+        title: 'post title',
+        url: 'https://www.google.com',
+        // summary field is missing
+        subreddit: 'test',
+      });
+
+      const newDocCount = await Post.estimatedDocumentCount();
+
+      expect(res.status).to.equal(400);
+      expect(newDocCount).to.equal(initialDocCount);
+      expect(res.body).to.have.property('error');
+    });
   });
 });

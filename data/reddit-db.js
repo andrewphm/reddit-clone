@@ -6,6 +6,12 @@ const mongoURI =
     ? 'mongodb://localhost/reddit-db'
     : 'mongodb://localhost/reddit-test-db';
 
+if (process.env.NODE_ENV === 'dev') {
+  console.log('dev db');
+} else {
+  console.log('test db');
+}
+
 mongoose
   .connect(mongoURI, {
     useNewUrlParser: true,

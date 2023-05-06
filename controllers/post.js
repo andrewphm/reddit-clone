@@ -2,10 +2,16 @@ const Post = require('../models/Post');
 
 // CREATE A NEW POST
 const createPost = async (req, res) => {
-  const post = new Post(req.body);
-  await post.save();
-  // Redirect to the home page
-  res.redirect('/posts');
+  try {
+    const post = new Post(req.body);
+    await post.save();
+    // Redirect to the home page
+    res.redirect('/posts');
+  } catch {
+    res.status(400).json({
+      error: 'Required fields are missing',
+    });
+  }
 };
 
 const newPost = async (req, res) => {
@@ -23,7 +29,7 @@ const getPosts = async (req, res) => {
 
 const getPost = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id).lean();
+    const post = await Post.findById(req.params.id).lean().populate('comments');
     res.render('posts-show', { post });
   } catch (error) {}
 };
