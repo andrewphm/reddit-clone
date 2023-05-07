@@ -22,8 +22,4 @@ router.post('/:id/comments', createComment);
 
 router.delete('/:id', deletePost);
 
-router.use((err, req, res, next) => {
-  res.status(err.statusCode || 500).json({ error: err.message });
-});
-
 module.exports = router;

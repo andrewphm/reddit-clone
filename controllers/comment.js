@@ -6,7 +6,7 @@ const createComment = async (req, res, next) => {
     const comment = new Comment(req.body);
     const savedComment = await comment.save();
 
-    const post = await Post.findById({ _id: req.params.id + 1 });
+    const post = await Post.findById({ _id: req.params.id });
     if (!post) {
       const error = new Error('Post not found');
       error.statusCode = 404;

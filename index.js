@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const postRoutes = require('./routes/post');
 const subredditRoutes = require('./routes/subreddit');
+const authRoutes = require('./routes/auth');
 
 const exphbs = require('express-handlebars');
 app.use(express.static('public'));
@@ -21,6 +22,15 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/posts', postRoutes);
 app.use('/', subredditRoutes);
+app.use('/', authRoutes);
+
+// Error handler
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.status(err.statusCode || 500).json({
+    error: err.message || 'Internal Server Error',
+  });
+});
 
 app.get('/', (req, res) => {
   res.render('home');
