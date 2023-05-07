@@ -1,11 +1,14 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
+
 const app = express();
 require('dotenv').config();
 
 const postRoutes = require('./routes/post');
 const subredditRoutes = require('./routes/subreddit');
 const authRoutes = require('./routes/auth');
+const checkAuth = require('./middleware/checkAuth');
 
 const exphbs = require('express-handlebars');
 app.use(express.static('public'));
@@ -16,6 +19,8 @@ app.set('view engine', 'handlebars');
 require('./data/reddit-db');
 
 // Middleware
+app.use(cookieParser());
+app.use(checkAuth);
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
