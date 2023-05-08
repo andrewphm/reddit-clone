@@ -7,7 +7,7 @@ const checkAuth = (req, res, next) => {
     req.user = null;
   } else {
     const accessToken = req.cookies.accessToken;
-    const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
+    const decoded = jwt.verify(accessToken, process.env.JWT_SECRET) || {};
     req.user = decoded;
   }
 
