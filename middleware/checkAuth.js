@@ -11,8 +11,6 @@ const checkAuth = (req, res, next) => {
     req.user = decoded;
   }
 
-  console.log('User: ', req.user);
-
   next();
 };
 

@@ -4,6 +4,7 @@ const Post = require('../models/Post');
 const createComment = async (req, res, next) => {
   try {
     const comment = new Comment(req.body);
+    comment.author = req.user._id;
     const savedComment = await comment.save();
 
     const post = await Post.findById({ _id: req.params.id });
@@ -14,10 +15,11 @@ const createComment = async (req, res, next) => {
     }
 
     post.comments.unshift(savedComment);
-    const savedPost = await post.save();
+    await post.save();
 
-    res.redirect(`/posts/${req.params.id}`);
+    return res.redirect(`/posts/${req.params.id}`);
   } catch (err) {
+    console.log(err);
     next(err);
   }
 };

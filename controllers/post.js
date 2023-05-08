@@ -1,4 +1,6 @@
 const Post = require('../models/Post');
+const User = require('../models/User');
+const mongoose = require('mongoose');
 
 // CREATE A NEW POST
 const createPost = async (req, res) => {
@@ -9,13 +11,19 @@ const createPost = async (req, res) => {
   }
 
   try {
+    const user = await User.findById(req.user._id);
     const post = new Post(req.body);
+    post.author = user._id;
     await post.save();
+
+    user.posts.unshift(post);
+    await user.save();
     // Redirect to the home page
-    return res.redirect('/posts');
-  } catch {
+    return res.redirect(`/posts/${post._id}`);
+  } catch (error) {
+    console.log(error);
     return res.status(400).json({
-      error: 'Required fields are missing',
+      error: 'Required fields are missings',
     });
   }
 };
@@ -34,7 +42,7 @@ const getPosts = async (req, res) => {
   const currentUser = req.user;
 
   try {
-    const posts = await Post.find({}).lean();
+    const posts = await Post.find({}).lean().populate('author');
     res.render('posts-index', { posts, currentUser });
   } catch (error) {
     console.log(error);
@@ -43,7 +51,10 @@ const getPosts = async (req, res) => {
 
 const getPost = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id).lean().populate('comments');
+    const post = await Post.findById(req.params.id)
+      .lean()
+      .populate({ path: 'comments', populate: { path: 'author' } })
+      .populate('author');
     res.render('posts-show', { post, currentUser: req.user });
   } catch (error) {}
 };

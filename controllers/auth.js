@@ -52,7 +52,7 @@ const login = async (req, res, next) => {
 
     const accessToken = jwt.sign(
       {
-        id: user._id,
+        _id: user._id,
         username: user.username,
       },
       process.env.JWT_SECRET,
