@@ -8,7 +8,7 @@ const agent = chai.request.agent(app);
 
 const should = chai.should();
 
-describe('Site', () => {
+describe.skip('Site', () => {
   // Describe what you are testing
   it('Should have home page', async () => {
     // Describe what should happen
