@@ -17,12 +17,7 @@
 
       <h2>Comments: </h2>
       {{#each post.comments}}
-        <div class='card mb-3'>
-          <div class='card-body'>
-            <p class='card-text'>{{this.content}}</p>
-            <div><small class='text-muted'>{{this.author.username}}</small></div>
-          </div>
-        </div>
+        {{> comment comment=this postId=../post._id}}
       {{/each}}
     </div>
   </div>

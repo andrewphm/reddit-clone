@@ -9,6 +9,7 @@ const postRoutes = require('./routes/post');
 const subredditRoutes = require('./routes/subreddit');
 const authRoutes = require('./routes/auth');
 const checkAuth = require('./middleware/checkAuth');
+const commentRoutes = require('./routes/comment');
 
 const exphbs = require('express-handlebars');
 app.use(express.static('public'));
@@ -28,6 +29,7 @@ app.use(checkAuth);
 app.use('/posts', postRoutes);
 app.use('/', subredditRoutes);
 app.use('/', authRoutes);
+app.use('/', commentRoutes);
 
 // Error handler
 app.use((err, req, res, next) => {
