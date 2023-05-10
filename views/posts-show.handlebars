@@ -1,19 +1,29 @@
-<div class='row'>
-  <div class='col-sm-6 col-sm-offset-3'>
-    <a href='{{post.url}}' class='lead'>{{post.title}}</a>
-    <p>{{post.summary}}</p>
-    <p>{{post.url}}</p>
-    <div><small>{{post.author.username}}</small></div>
+<div class='container'>
+  <div class='row'>
+    <div class='col-sm-6 offset-sm-3'>
+      <a href='{{post.url}}' class='lead'>{{post.title}}</a>
+      <p>{{post.summary}}</p>
+      <p>{{post.url}}</p>
+      <div><small>{{post.author.username}}</small></div>
 
-    <form action='/posts/{{post._id}}/comments' method='post'>
-      <textarea class='form-control' name='content' placeholder='Comment'></textarea>
-      <div class='text-right'>
-        <button type='submit' class='btn btn-primary'>Save</button>
-      </div>
-    </form>
-    {{#each post.comments}}
-      <p>{{this.content}}</p>
-      <div><small>{{this.author.username}}</small></div>
-    {{/each}}
+      <form action='/posts/{{post._id}}/comments' method='post'>
+        <div class='form-group'>
+          <textarea class='form-control' name='content' placeholder='Comment' rows='3'></textarea>
+        </div>
+        <div class='text-right'>
+          <button type='submit' class='btn btn-primary'>Save</button>
+        </div>
+      </form>
+
+      <h2>Comments: </h2>
+      {{#each post.comments}}
+        <div class='card mb-3'>
+          <div class='card-body'>
+            <p class='card-text'>{{this.content}}</p>
+            <div><small class='text-muted'>{{this.author.username}}</small></div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
   </div>
 </div>

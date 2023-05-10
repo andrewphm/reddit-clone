@@ -42,7 +42,7 @@ const getPosts = async (req, res) => {
   const currentUser = req.user;
 
   try {
-    const posts = await Post.find({}).lean().populate('author');
+    const posts = await Post.find({}).lean();
     res.render('posts-index', { posts, currentUser });
   } catch (error) {
     console.log(error);
@@ -51,10 +51,8 @@ const getPosts = async (req, res) => {
 
 const getPost = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id)
-      .lean()
-      .populate({ path: 'comments', populate: { path: 'author' } })
-      .populate('author');
+    const post = await Post.findById(req.params.id).lean();
+
     res.render('posts-show', { post, currentUser: req.user });
   } catch (error) {}
 };
@@ -66,7 +64,7 @@ const deletePost = async (req, res) => {};
 const getSubredditPosts = async (req, res) => {
   try {
     const posts = await Post.find({ subreddit: req.params.subreddit }).lean();
-    return res.render('posts-index', { posts });
+    return res.render('posts-index', { posts, currentUser: req.user });
   } catch (error) {
     return res.status(404).json({
       error: 'No subreddit found with that name',

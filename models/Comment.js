@@ -1,5 +1,7 @@
 const { Schema, model } = require('mongoose');
 
+const autoPopulate = require('../utils/autopopulate');
+
 const commentSchema = new Schema(
   {
     content: { type: String, required: true },
@@ -7,5 +9,7 @@ const commentSchema = new Schema(
   },
   { timestamps: true }
 );
+
+commentSchema.pre('findOne', autoPopulate('author')).pre('find', autoPopulate('author'));
 
 module.exports = model('Comment', commentSchema);

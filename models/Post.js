@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const autoPopulate = require('../utils/autopopulate');
+
 const PostSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
@@ -10,6 +12,11 @@ const PostSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+PostSchema.pre('findOne', autoPopulate('author'))
+  .pre('find', autoPopulate('author'))
+  .pre('findOne', autoPopulate('comments'))
+  .pre('find', autoPopulate('comments'));
 
 let Post;
 

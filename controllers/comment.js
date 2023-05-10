@@ -15,7 +15,8 @@ const createComment = async (req, res, next) => {
     }
 
     post.comments.unshift(savedComment);
-    await post.save();
+    const savedPost = await post.save();
+    console.log(savedPost);
 
     return res.redirect(`/posts/${req.params.id}`);
   } catch (err) {
